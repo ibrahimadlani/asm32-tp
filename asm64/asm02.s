@@ -1,16 +1,21 @@
-section .data
-    msg db '1337', 0xA
+     # Chaîne de caractères représentant 1337
+.section .text
+.global _start
 
-section .text
-global _start
 
 _start:
-    mov eax, 4      ; syscall number for sys_write
-    mov ebx, 1      ; file descriptor 1 is stdout
-    mov ecx, msg    ; message to write
-    mov edx, 5      ; message length
-    int 0x80        ; call kernel
+    # Affichage de 1337
+    mov $4, %eax        # Mettre le numéro de l'appel système pour 'write' dans EAX
+    mov $1, %ebx        # Mettre le descripteur de fichier pour 'stdout' dans EBX
+    mov $message, %ecx  # Mettre l'adresse de la chaîne de caractères dans ECX
+    mov $4, %edx        # Mettre la longueur de la chaîne de caractères dans EDX
+    int $0x80           # Appeler le système pour écrire la chaîne de caractères
 
-    mov eax, 1      ; syscall number for sys_exit
-    xor ebx, ebx    ; return 0
-    int 0x80        ; call kernel
+    # On garde le retour 0
+    mov $0, %ebx        # Mettre 0 dans EBX, qui est le statut de sortie
+    mov $1, %eax        # Mettre le numéro de l'appel système pour 'exit' dans EAX
+    int $0x80           # Appeler le système pour terminer le programme
+
+.section .data
+message:
+    .ascii "1337"       # Chaîne de caractères représentant 1337
